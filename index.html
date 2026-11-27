@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Days Until Calculator - Tính ngày còn lại</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+
+<body class="bg-slate-50 min-h-screen text-slate-800">
+
+    <header class="bg-white border-b">
+        <div class="max-w-4xl mx-auto px-5 py-5 flex items-center gap-3">
+            <div class="w-11 h-11 bg-blue-100 text-blue-600 rounded-xl flex items-center justify-center">
+                <i class="fa-solid fa-calendar-days text-xl"></i>
+            </div>
+            <div>
+                <h1 class="text-xl font-bold">Days Until Calculator</h1>
+                <p class="text-sm text-gray-500">Công cụ tính ngày còn lại</p>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-4xl mx-auto px-5 py-10">
+
+        <div class="text-center mb-8">
+            <div class="inline-flex items-center justify-center w-16 h-16 bg-blue-100 text-blue-600 rounded-2xl mb-4">
+                <i class="fa-solid fa-hourglass-half text-3xl"></i>
+            </div>
+            <h2 class="text-3xl font-bold mb-3">Còn bao nhiêu ngày nữa?</h2>
+            <p class="text-gray-500">Tính thời gian đến ngày thi, sinh nhật hoặc sự kiện quan trọng.</p>
+        </div>
+
+        <section class="bg-white border rounded-2xl p-6 mb-6">
+
+            <div class="mb-5">
+                <label class="block font-semibold mb-2">Tên sự kiện</label>
+                <input id="eventName" type="text" maxlength="100" placeholder="Ví dụ: Ngày sinh nhật, ngày thi..."
+                    class="w-full border rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-blue-400">
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-5">
+
+                <div>
+                    <label class="block font-semibold mb-2">Ngày hiện tại</label>
+                    <input id="startDate" type="date"
+                        class="w-full border rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-blue-400">
+                </div>
+
+                <div>
+                    <label class="block font-semibold mb-2">Ngày mục tiêu</label>
+                    <input id="targetDate" type="date"
+                        class="w-full border rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-blue-400">
+                </div>
+
+            </div>
+
+            <div class="flex flex-col sm:flex-row gap-3">
+                <button onclick="calculateDays()"
+                    class="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl font-semibold">
+                    <i class="fa-solid fa-calculator mr-2"></i>Tính ngày
+                </button>
+
+                <button onclick="resetCalculator()" class="px-6 py-3 border rounded-xl hover:bg-gray-50 font-semibold">
+                    <i class="fa-solid fa-rotate-left mr-2"></i>Đặt lại
+                </button>
+            </div>
+
+        </section>
+
+        <section id="resultSection" class="hidden">
+
+            <div class="bg-blue-600 text-white rounded-2xl p-7 text-center mb-6">
+                <p id="resultTitle" class="text-blue-100 mb-3">Thời gian còn lại</p>
+
+                <h3 class="text-6xl font-bold mb-3" id="dayResult">0</h3>
+
+                <p class="text-lg font-medium" id="resultUnit">ngày</p>
+
+                <p id="eventResult" class="mt-4 text-blue-100"></p>
+            </div>
+
+            <div class="bg-white border rounded-2xl p-6 mb-6">
+                <h3 class="font-bold text-lg mb-5">
+                    <i class="fa-solid fa-chart-pie text-blue-500 mr-2"></i>
+                    Chi tiết thời gian
+                </h3>
+
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+
+                    <div class="bg-slate-50 rounded-xl p-4 text-center">
+                        <p class="text-sm text-gray-500 mb-2">Số ngày</p>
+                        <p id="detailDays" class="text-2xl font-bold text-blue-600">0</p>
+                    </div>
+
+                    <div class="bg-slate-50 rounded-xl p-4 text-center">
+                        <p class="text-sm text-gray-500 mb-2">Số tuần</p>
+                        <p id="detailWeeks" class="text-2xl font-bold">0</p>
+                    </div>
+
+                    <div class="bg-slate-50 rounded-xl p-4 text-center">
+                        <p class="text-sm text-gray-500 mb-2">Số tháng</p>
+                        <p id="detailMonths" class="text-2xl font-bold">0</p>
+                    </div>
+
+                    <div class="bg-slate-50 rounded-xl p-4 text-center">
+                        <p class="text-sm text-gray-500 mb-2">Số năm</p>
+                        <p id="detailYears" class="text-2xl font-bold">0</p>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="bg-white border rounded-2xl p-6 mb-6">
+                <h3 class="font-bold mb-3">
+                    <i class="fa-solid fa-calendar-check text-blue-500 mr-2"></i>
+                    Thông tin ngày mục tiêu
+                </h3>
+
+                <div class="space-y-3 text-sm">
+                    <div class="flex justify-between gap-3">
+                        <span class="text-gray-500">Tên sự kiện</span>
+                        <strong id="detailEvent">---</strong>
+                    </div>
+
+                    <div class="flex justify-between gap-3">
+                        <span class="text-gray-500">Ngày bắt đầu</span>
+                        <strong id="detailStart">---</strong>
+                    </div>
+
+                    <div class="flex justify-between gap-3">
+                        <span class="text-gray-500">Ngày mục tiêu</span>
+                        <strong id="detailTarget">---</strong>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+        <section class="bg-blue-50 border border-blue-100 rounded-2xl p-5">
+            <h3 class="font-bold text-blue-800 mb-2">
+                <i class="fa-solid fa-circle-info mr-2"></i>Hướng dẫn sử dụng
+            </h3>
+            <p class="text-sm text-blue-700 leading-6">
+                Nhập tên sự kiện, chọn ngày hiện tại và ngày mục tiêu.
+                Nhấn nút Tính ngày để xem thời gian còn lại hoặc số ngày đã trôi qua.
+                Bạn có thể thay đổi ngày để tính lại bất cứ lúc nào.
+            </p>
+        </section>
+
+    </main>
+
+    <footer class="text-center py-7 text-sm text-gray-400">
+        © 2026 Days Until Calculator - Công cụ tính ngày
+    </footer>
+
+    <script>
+        const startDateInput = document.getElementById("startDate");
+        const targetDateInput = document.getElementById("targetDate");
+
+        function getToday() {
+            const today = new Date();
+
+            const year = today.getFullYear();
+            const month = String(today.getMonth() + 1).padStart(2, "0");
+            const day = String(today.getDate()).padStart(2, "0");
+
+            return `${year}-${month}-${day}`;
+        }
+
+        function parseDate(value) {
+            if (!value) return null;
+
+            const parts = value.split("-").map(Number);
+
+            if (parts.length !== 3) return null;
+
+            const [year, month, day] = parts;
+            const date = new Date(Date.UTC(year, month - 1, day));
+
+            if (
+                date.getUTCFullYear() !== year ||
+                date.getUTCMonth() !== month - 1 ||
+                date.getUTCDate() !== day
+            ) {
+                return null;
+            }
+
+            return date;
+        }
+
+        function formatDate(date) {
+            return date.toLocaleDateString("vi-VN", {
+                day: "2-digit",
+                month: "2-digit",
+                year: "numeric",
+                timeZone: "UTC"
+            });
+        }
+
+        function calculateDays() {
+            const start = parseDate(startDateInput.value);
+            const target = parseDate(targetDateInput.value);
+
+            const eventName = document.getElementById("eventName").value.trim();
+
+            if (!start) {
+                alert("Vui lòng chọn ngày hiện tại hợp lệ!");
+                return;
+            }
+
+            if (!target) {
+                alert("Vui lòng chọn ngày mục tiêu hợp lệ!");
+                return;
+            }
+
+            const difference = Math.round(
+                (target.getTime() - start.getTime()) / 86400000
+            );
+
+            const absoluteDays = Math.abs(difference);
+
+            let title = "";
+            let message = "";
+
+            if (difference > 0) {
+                title = "Thời gian còn lại";
+                message = eventName
+                    ? `Còn ${absoluteDays} ngày nữa đến ${eventName}!`
+                    : "Đang đếm ngược đến ngày mục tiêu.";
+            } else if (difference < 0) {
+                title = "Thời gian đã trôi qua";
+                message = eventName
+                    ? `${eventName} đã qua ${absoluteDays} ngày.`
+                    : "Ngày mục tiêu đã ở trong quá khứ.";
+            } else {
+                title = "Ngày đặc biệt đã đến!";
+                message = eventName
+                    ? `Hôm nay chính là ${eventName}!`
+                    : "Hôm nay là ngày mục tiêu của bạn!";
+            }
+
+            document.getElementById("resultTitle").textContent = title;
+            document.getElementById("dayResult").textContent = absoluteDays.toLocaleString("vi-VN");
+            document.getElementById("resultUnit").textContent = "ngày";
+            document.getElementById("eventResult").textContent = message;
+
+            document.getElementById("detailDays").textContent = absoluteDays.toLocaleString("vi-VN");
+            document.getElementById("detailWeeks").textContent = (absoluteDays / 7).toFixed(1);
+            document.getElementById("detailMonths").textContent = (absoluteDays / 30.4375).toFixed(1);
+            document.getElementById("detailYears").textContent = (absoluteDays / 365.25).toFixed(2);
+
+            document.getElementById("detailEvent").textContent = eventName || "Không có tên";
+            document.getElementById("detailStart").textContent = formatDate(start);
+            document.getElementById("detailTarget").textContent = formatDate(target);
+
+            document.getElementById("resultSection").classList.remove("hidden");
+
+            document.getElementById("resultSection").scrollIntoView({
+                behavior: "smooth",
+                block: "start"
+            });
+        }
+
+        function resetCalculator() {
+            startDateInput.value = getToday();
+            targetDateInput.value = "";
+            document.getElementById("eventName").value = "";
+
+            document.getElementById("resultSection").classList.add("hidden");
+        }
+
+        startDateInput.value = getToday();
+    </script>
+
+</body>
+
+</html>
